@@ -1,0 +1,6 @@
+@startuml
+
+!include https://github.com/plantuml-stdlib/C4-PlantUML/blob/master/C4_Container.puml
+
+System(Sistema, "System","System descrição")
+@enduml
