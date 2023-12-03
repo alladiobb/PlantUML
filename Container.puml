@@ -9,14 +9,17 @@
 
 LAYOUT_WITH_LEGEND()
 
-Person(user, "Customer", "People that need see the site", $sprite="users")
+Person(user, "Usuário", "Pessoas que vão acessar o site", $sprite="users")
+    
+    System(system, "Sistema", "Sistema que recebe a solicitação do usuário")
 
-System_Boundary(Dockerfile, "Dockerfile", "teste"){
+System_Boundary(Dockerfile, "Container A"){
     Container(spa, "SPA", "express", "The main interface that the customer interacts with")
     Container(api, "Back-End", "nodejs", "Handles all business logic", $sprite="nodejs")
 }
 
 
-Rel(user, spa, "Uses", "https")
-Rel_R(spa, api, "Uses", "https")
+Rel(user, system, "Solicita a página", "https")
+Rel(system, spa, "Acessando o container docker (express + nodejs)", "https")
+Rel_R(spa, api, "Acessando o NodeJS", "https")
 @enduml

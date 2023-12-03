@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Clientes", "Pessoas que vão acessar o site", $sprite="users")
+
+    System(system, "SPA", "Sistema que recebe a solicitação do usuário")
+    Container(api, "Container A", "docker", "Faz toda a lógica do sistema para devolver a página", $sprite="nodejs")
+
+Rel(user, system, "Solicita a página", "https")
+Rel(system, api, "Acessando o container docker (express + nodejs)", "https")
+@enduml
