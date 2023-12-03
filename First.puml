@@ -3,24 +3,20 @@
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
-!include DEVICONS/angular.puml
-!include DEVICONS/java.puml
-!include DEVICONS/msql_server.puml
 !include FONTAWESOME/users.puml
 !include DEVICONS/nodejs.puml
-!include DEVICONS/react.puml
 !include DEVICONS/mysql.puml
 
 LAYOUT_WITH_LEGEND()
 
 Person(user, "Customer", "People that need see the site", $sprite="users")
 
-System_Boundary(Container_1, "Container_1"){
+System_Boundary(Dockerfile, "Dockerfile", "teste"){
     Container(spa, "SPA", "express", "The main interface that the customer interacts with")
-    Container(api, "API", "nodejs", "Handles all business logic", $sprite="nodejs")
+    Container(api, "Back-End", "nodejs", "Handles all business logic", $sprite="nodejs")
 }
 
 
 Rel(user, spa, "Uses", "https")
-Rel(spa, api, "Uses", "https")
+Rel_R(spa, api, "Uses", "https")
 @enduml
