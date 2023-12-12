@@ -1,0 +1,5 @@
+sudo passwd root
+- Colocar a senha root e confirma-la 
+su
+apt-get update
+apt-get install graphviz
