@@ -1,5 +1,10 @@
 sudo passwd root
 - Colocar a senha root e confirma-la 
+
 su
 apt-get update
 apt-get install graphviz
+
+- OBS: Instalar o plantUML nas extensões 
+
+- OK, está pronto para usar
