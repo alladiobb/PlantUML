@@ -1,0 +1,21 @@
+@startuml
+
+!define RECTANGLE class
+
+RECTANGLE SistemaWeb {
+}
+
+RECTANGLE DockerNetwork {
+}
+
+RECTANGLE FrontendContainer {
+}
+
+RECTANGLE BackendContainer {
+}
+
+SistemaWeb -[hidden]-> DockerNetwork
+DockerNetwork -[hidden]-> FrontendContainer
+DockerNetwork -[hidden]-> BackendContainer
+
+@enduml
