@@ -1,0 +1,24 @@
+@startuml
+
+!define ICONURL https://raw.githubusercontent.com/rabelendauguste/plantuml-icon-font-sprites/v7.0/sprites
+!define ICON(name) [![](ICONURL/#{name}.png =32x32) <sub>#{name}</sub>]
+
+!define CONTAINER_DOCKER(name) [container "#{name}\n(Docker)" as {name} <<docker>>]
+
+package "Sistema Web" {
+    [Person] as Stakeholder
+    [Context]
+    [Other Contexts]
+    
+    package "Ambiente Docker" {
+        CONTAINER_DOCKER(Frontend)
+        CONTAINER_DOCKER(Backend)
+    }
+}
+
+Stakeholder -[hidden]-> Context
+Stakeholder -[hidden]-> Other_Contexts
+Context -[hidden]-> Frontend
+Context -[hidden]-> Backend
+
+@enduml
