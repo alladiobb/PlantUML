@@ -15,15 +15,16 @@ Person(user, "Usuário", "Pessoas que vão acessar o site", $sprite="users")
     System(system, "Sistema", "Sistema que recebe a solicitação do usuário")
 
 System_Boundary(Dockerfile, "Container A"){
-    Container(spa, "SPA", "express", "Interface que os usuários interagem")
-    Container(api, "Back-End", "nodejs", "Logica de negócios", $sprite="nodejs")
-    Container(reactAPP, "React APP", "react", "Interface do usuário construida pelo REACT   ", $sprite="react")
+    Container(spa, "SPA", "SPA", "Interface que os usuários interagem", $sprite="spa")
+    Container(nodejs, "Back-End", "nodejs", "Logica de negócios", $sprite="nodejs")
+    Container(reactAPP, "React APP", "react", "Interface do usuário construida pelo REACT ", $sprite="react")
+    Container(express, "Express", "nodejs", "Framework web", $sprite="express")
 
+    Rel(user, system, "Usa", "https")
+    Rel(system, spa, "Implementa", "https")
+    Rel_R(spa, reactAPP, "Compõe", "https")
+    Rel(spa, nodejs, "Acessando o NodeJS", "https")
+    Rel(spa, express, "Acessando o Express", "https")
+    Rel(nodejs, express, "Acessando o Express", "https")
 }
-
-
-Rel(user, system, "Solicita a página", "https")
-Rel(system, spa, "Acessando o container docker (express + nodejs)", "https")
-Rel_R(spa, api, "Acessando o NodeJS", "https")
-Rel_R(spa, reactAPP, "Renderiza interface do react", "https")
 @enduml

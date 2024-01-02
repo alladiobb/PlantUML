@@ -1,24 +1,33 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 !include FONTAWESOME/users.puml
 !include DEVICONS/nodejs.puml
+!include DEVICONS/react.puml
 !include DEVICONS/mysql.puml
 
 LAYOUT_WITH_LEGEND()
 
 Person(user, "Usuário", "Pessoas que vão acessar o site", $sprite="users")
     
-    System(system, "Sistema", "Sistema que recebe a solicitação do usuário")
+System(system, "Sistema", "Sistema que recebe a solicitação do usuário")
 
 System_Boundary(Dockerfile, "Container A"){
-    Container(spa, "SPA", "express", "The main interface that the customer interacts with")
-    Container(api, "Back-End", "nodejs", "Handles all business logic", $sprite="nodejs")
+  Container(api, "API", "nodejs", "Logica de negócios", $sprite="nodejs")
+  Container(express, "Express", "nodejs", "Framework web", $sprite="express")
+  Container(spa, "SPA", "SPA", "Interface que os usuários interagem")
+  Container(reactAPP, "React APP", "react", "Interface do usuário construida pelo REACT   ", $sprite="react")
+
 }
 
 
 Rel(user, system, "Solicita a página", "https")
-Rel(system, spa, "Acessando o container docker (express + nodejs)", "https")
-Rel_R(spa, api, "Acessando o NodeJS", "https")
+Rel(system, api, "Acessando a API", "https")
+Rel_R(api, system, "Retornando dados", "https")
+Rel_R(express, spa, "Renderizando a interface do usuário", "https")
+Rel_R(spa, reactAPP, "Usando o React", "https")
+
+Rel_R(api, express, "Acessa o Express", "https")
 @enduml
