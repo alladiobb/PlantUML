@@ -10,21 +10,36 @@
 
 LAYOUT_WITH_LEGEND()
 
+title "Sistema XPTO"
+
 Person(user, "Usuário", "Pessoas que vão acessar o site", $sprite="users")
     
-    System(system, "Sistema", "Sistema que recebe a solicitação do usuário")
+System_Ext(payment_gateway, "Payment Gateway", "Payment Processor")
 
-System_Boundary(Dockerfile, "Container A"){
+System_Boundary(Dockerfile, "Sistema XPTO"){
     Container(spa, "SPA", "SPA", "Interface que os usuários interagem", $sprite="spa")
-    Container(nodejs, "Back-End", "nodejs", "Logica de negócios", $sprite="nodejs")
+    Container(XPTO_core, "Back-End", "TS", "Logica de negócios", $sprite="typescript")
     Container(reactAPP, "React APP", "react", "Interface do usuário construida pelo REACT ", $sprite="react")
-    Container(express, "Express", "nodejs", "Framework web", $sprite="express")
+    Container(reactNativeAPP, "React Native APP", "react", "Interface do usuário construida pelo REACT Native ", $sprite="reactnative")
+    Container(balance_service, "Balance Service", "TS", "Serviço de saldo", $sprite="typescript")
+    Container(statements_service, "Statements Service", "TS", "Serviço de extrato", $sprite="typescript")
+    Container(payment_service, "Payment Service", "TS", "Serviço de pagamento", $sprite="typescript")
 
-    Rel(user, system, "Usa", "https")
-    Rel(system, spa, "Implementa", "https")
+    ContainerDb(XPTO_core_db, "XPTO Core DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(XPTO_core, XPTO_core_db, "Usa", "MySQL Driver")
+
+    ContainerDb(balance_service_db, "Balance Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(balance_service, balance_service_db, "Usa", "MySQL Driver")
+
+    ContainerDb(statements_service_db, "Statements Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(statements_service, statements_service_db, "Usa", "MySQL Driver")
+
+    ContainerDb(payment_service_db, "Payment Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(payment_service, payment_service_db, "Usa", "MySQL Driver")
+
+    Rel(user, spa, "Usa", "https")
     Rel_R(spa, reactAPP, "Compõe", "https")
-    Rel(spa, nodejs, "Acessando o NodeJS", "https")
-    Rel(spa, express, "Acessando o Express", "https")
-    Rel(nodejs, express, "Acessando o Express", "https")
+    Rel_R(spa, reactNativeAPP, "Compõe", "https")
+    Rel(spa, XPTO_core, "Acessando o XPTO_core", "https")
 }
 @enduml
