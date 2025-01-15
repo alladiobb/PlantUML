@@ -10,6 +10,8 @@
 
 LAYOUT_WITH_LEGEND()
 
+AddRelTag("Async", $lineStyle= DashedLine())
+
 title "Sistema XPTO"
 
 Person(user, "Usuário", "Pessoas que vão acessar o site", $sprite="users")
@@ -18,12 +20,12 @@ System_Ext(payment_gateway, "Payment Gateway", "Payment Processor")
 
 System_Boundary(Dockerfile, "Sistema XPTO"){
     Container(spa, "SPA", "SPA", "Interface que os usuários interagem", $sprite="spa")
-    Container(XPTO_core, "Back-End", "TS", "Logica de negócios", $sprite="typescript")
+    Container(XPTO_core, "XPTO Core", "TS", "Logica de negócios", $sprite="typescript")
     Container(reactAPP, "React APP", "react", "Interface do usuário construida pelo REACT ", $sprite="react")
     Container(reactNativeAPP, "React Native APP", "react", "Interface do usuário construida pelo REACT Native ", $sprite="reactnative")
     Container(balance_service, "Balance Service", "TS", "Serviço de saldo", $sprite="typescript")
     Container(statements_service, "Statements Service", "TS", "Serviço de extrato", $sprite="typescript")
-    Container(payment_service, "Payment Service", "TS", "Serviço de pagamento", $sprite="typescript")
+    Container(payment_acl, "Payment Service", "TS", "Anticorruption Layer for Payment", $sprite="typescript")
 
     ContainerDb(XPTO_core_db, "XPTO Core DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
     Rel(XPTO_core, XPTO_core_db, "Usa", "MySQL Driver")
@@ -34,12 +36,22 @@ System_Boundary(Dockerfile, "Sistema XPTO"){
     ContainerDb(statements_service_db, "Statements Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
     Rel(statements_service, statements_service_db, "Usa", "MySQL Driver")
 
-    ContainerDb(payment_service_db, "Payment Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
-    Rel(payment_service, payment_service_db, "Usa", "MySQL Driver")
+    ContainerDb(payment_acl_db, "Payment Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(payment_acl, payment_acl_db, "Usa", "MySQL Driver")
+    
+    ContainerDb(payment_acl_db, "Payment Service DB", "Banco de Dados", "Armazenamento de dados", $sprite="mysql")  
+    Rel(payment_acl, payment_gateway, "Usa", "MySQL Driver")
 
     Rel(user, spa, "Usa", "https")
     Rel_R(spa, reactAPP, "Compõe", "https")
     Rel_R(spa, reactNativeAPP, "Compõe", "https")
-    Rel(spa, XPTO_core, "Acessando o XPTO_core", "https")
+    Rel(spa, XPTO_core, "Usa", "https")
+    Rel(spa, balance_service, "Usa", "https")
+    Rel(spa, statements_service, "Usa", "https")
+
+    Rel(XPTO_core, balance_service, "Usa", "Topic", $tags="Async")
+    Rel(XPTO_core, statements_service, "Usa", "Topic", $tags="Async")
+    Rel(XPTO_core, payment_acl, "Usa", "Topic")
+    ' Rel(XPTO_core, balance_service, "Usa", "Topic")
 }
 @enduml
